@@ -1,6 +1,7 @@
-def hextobase64(hexstring):
-    binlist=[bin(int(l,16))[2:].zfill(4) for l in hexstring]        #convert the list to binary values
-    binary=''.join(binlist)                                         #concat the list so it is one string
+def chartobase64(charstring):
+    charlist=[ord(c) for c in charstring]                 #make a list of character orders(ascii codes)
+    binlist=[bin(l)[2:].zfill(8) for l in charlist]      #convert the list to binary values
+    binary=''.join(binlist)                             #concat the list so it is one string
     index='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
     base64=''                                           #are these necessary?
     charbuff = ''

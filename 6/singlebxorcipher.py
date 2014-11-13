@@ -1,6 +1,6 @@
 import fixedxor
 
-alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,.-'" + '"'
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,.-:'" + '"'
 
 
 def sbxorcip(string):

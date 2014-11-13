@@ -1,4 +1,5 @@
 import b642hex
+import fixedxor
 import hamming
 import singlebxorcipher
 
@@ -9,21 +10,24 @@ def rkxbreaker(cipherfile):
         hextext = b642hex.b642hex(b64ciptext)
         # print hextext, '\n'
         ndistances = []
-        for keysize in range(2, 44):
+        for keysize in range(2, 41):
             # first keysizeworth:	hextext[:keysize*2]
             # second keysizeworth:	hextext[keysize*2:keysize*4]
             # third keysizeworth:	hextext[keysize*4:keysize*6]
             # fourth keysizeworth:	hextext[keysize*6:keysize*8]
-            ndist12 = float(hamming.hamming(hextext[:keysize * 2], hextext[keysize * 2:keysize * 4])) / keysize
-            ndist13 = float(hamming.hamming(hextext[:keysize * 2], hextext[keysize * 4:keysize * 6])) / keysize
-            ndist14 = float(hamming.hamming(hextext[:keysize * 2], hextext[keysize * 6:keysize * 8])) / keysize
-            ndist23 = float(
+            hdist12 = float(
+                hamming.hamming(hextext[:keysize * 2], hextext[keysize * 2:keysize * 4])) / keysize
+            hdist13 = float(
+                hamming.hamming(hextext[:keysize * 2], hextext[keysize * 4:keysize * 6])) / keysize
+            hdist14 = float(
+                hamming.hamming(hextext[:keysize * 2], hextext[keysize * 6:keysize * 8])) / keysize
+            hdist23 = float(
                 hamming.hamming(hextext[keysize * 2:keysize * 4], hextext[keysize * 4:keysize * 6])) / keysize
-            ndist24 = float(
+            hdist24 = float(
                 hamming.hamming(hextext[keysize * 2:keysize * 4], hextext[keysize * 6:keysize * 8])) / keysize
-            ndist34 = float(
+            hdist34 = float(
                 hamming.hamming(hextext[keysize * 4:keysize * 6], hextext[keysize * 6:keysize * 8])) / keysize
-            normdistance = (ndist12 + ndist13 + ndist14 + ndist23 + ndist24 + ndist34) / 6
+            normdistance = (hdist12 + hdist13 + hdist14 + hdist23 + hdist24 + hdist34) / 6
             # normdistance = float(hamming.hamming(hextext[:keysize*2],hextext[keysize*2:(keysize*4)]))/keysize
             # print hextext[:keysize*2],hextext[keysize*2:(keysize*4)]
             # print hextext[:keysize*2],hextext[keysize*2:keysize*4]
@@ -60,10 +64,19 @@ def rkxbreaker(cipherfile):
         for i in transblocks:
             # print transblocks.index(i)
             plaintblocks[transblocks.index(i)] = singlebxorcipher.sbxorcip(i)
+        # key = ''
         plaintext = ''
         for i in range(len(plaintblocks[0])):
             for j in range(KEYSIZE):
                 plaintext += (plaintblocks[j][i])
+        # print KEYSIZE
+        # plainhex = plaintext.encode('hex')
+        # print len(plainhex), len(hextext)
+        # key = fixedxor.fixedxor(plainhex,hextext[:len(plainhex)])[:KEYSIZE*2].decode('hex')
+        # print key
+        # for i in range(KEYSIZE):
+        #     key += fixedxor.fixedxor(hextext[(2*i-1):(2*i)], str(ord(plaintext[i])))
+        # # print hextext[0],hextext[1], ord(plaintext[0]), ord(plaintext[1])
         return plaintext
     # print singlebxorcipher.sbxorcip(i), '\n'
     # print '\n'.join(blocks)

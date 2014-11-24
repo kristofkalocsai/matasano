@@ -5,9 +5,11 @@ import singlebxorcipher
 
 
 def rkxbreaker(cipherfile):
-    with open(cipherfile, 'r') as f:
+    with open(cipherfile, 'r+') as f:
+        # print len(f.read())
         b64ciptext = f.read().replace('\n', '')
         hextext = b642hex.b642hex(b64ciptext)
+        # print len(b64ciptext)
         # print hextext, '\n'
         ndistances = []
         for keysize in range(2, 41):
